@@ -4,13 +4,7 @@ from watson_developer_cloud import AssistantV1, WatsonApiException
 import json, ast
 from watson_developer_cloud import LanguageTranslatorV3 as LanguageTranslator
 
-def get_response_from_watson_assistamt(version, username, password, url, workspace_id):
-
-    print "Enter your text here"
-    inpt = raw_input('>>>')
-
-    input_text={}
-    input_text['text'] = str(inpt)
+def get_response_from_watson_assistamt(version, username, password, url, workspace_id, input_json):
 
     # Initialize assistant
     assistant = AssistantV1(
@@ -24,7 +18,7 @@ def get_response_from_watson_assistamt(version, username, password, url, workspa
     try:
         response = assistant.message(
             workspace_id=workspace_id,
-            input=input_text
+            input=input_json
         ).get_result()
         # print(json.dumps(response, indent=2))
 
@@ -64,7 +58,7 @@ def get_response_from_language_translator(version, iam_apikey, url, word):
 
 def main():
     # Necessary credentials
-    
+  
     # Watson Assistant Parameters
     assistant_version = <'version'>
     username = <'username'>
@@ -76,15 +70,23 @@ def main():
     tranlator_version = = <'version'>
     iam_apikey = <'iam_apikey'>
     translator_url = <'url'>
-    
 
-    # Send input text to watson conversation api and get the response of assistant
-    assistant_response = get_response_from_watson_assistamt(assistant_version, username, password, assistant_url, workspace_id).encode("utf-8")
+
+    print "Enter your text here"
+    inpt = raw_input('>>>')
+
+    
 
     # Send response from watson assistan to language translator and get response of it
-    translator_response = get_response_from_language_translator(translator_version, iam_apikey, translator_url, assistant_response)
+    translator_response = get_response_from_language_translator(translator_version, iam_apikey, translator_url, str(inpt))
     print(translator_response)
-    
+
+    input_text={}
+    input_text['text'] = str(translator_response)
+
+    # Send input text to watson conversation api and get the response of assistant
+    assistant_response = get_response_from_watson_assistamt(assistant_version, username, password, assistant_url, workspace_id, input_text).encode("utf-8")
+    print(assistant_response)
 
 if __name__ == "__main__":
     main()
